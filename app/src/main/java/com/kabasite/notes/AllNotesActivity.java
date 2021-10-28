@@ -1,15 +1,21 @@
 package com.kabasite.notes;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.GridLayout;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 
 public class AllNotesActivity extends AppCompatActivity {
+    public static final String KEY_NOTE_OBJECT = "note object passed through intent";
+    private ImageView imgAddNewNote;
     private RecyclerView recyclerView;
     RecViewAdapter adapter;
 
@@ -18,17 +24,27 @@ public class AllNotesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_notes);
 
-        ArrayList<Note> notes = new ArrayList<>();
-        notes = new ArrayList<>();
-        notes.add(new Note("Hello There", "General Kenobi"));
-        notes.add(new Note("Hello There General kenobi ah general gracious how are you you must be tired af",
-                "General Kenobi: yeah I am tired AF, how are you doing \n I am doing my part in the comming war by \n comming all over the place"));
-
         recyclerView = findViewById(R.id.recViewIdAllNotes);
+        imgAddNewNote = findViewById(R.id.imgIdAddNote);
+
+
         adapter = new RecViewAdapter();
-        adapter.setNotes(notes);
+        ArrayList<Note> note = Utils.getAllNotes();
+        if(null == note){
+            note = new ArrayList<Note>();
+            Log.e("myError", "onCreate: empty note passed to setNote in AllNotesActivity");
+        }
+        adapter.setNotes(note);
         Log.d("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "onCreate: setNotesCalled from AllNotesActivity");
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayout = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        GridLayoutManager gridLayout = new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false);
+        recyclerView.setLayoutManager(gridLayout);
+
+        imgAddNewNote.setOnClickListener(v -> {
+            Intent intent = new Intent(this, EditNoteActivity.class);
+            intent.putExtra(KEY_NOTE_OBJECT, new Note().toSerialized());
+            startActivity(intent);
+        });
     }
 }
