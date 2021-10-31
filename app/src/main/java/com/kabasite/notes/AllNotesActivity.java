@@ -8,14 +8,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
 
 public class AllNotesActivity extends AppCompatActivity {
     public static final String KEY_NOTE_OBJECT = "note object passed through intent";
-    private ImageView imgAddNewNote;
+//    private ImageView imgAddNewNote;
+    private ExtendedFloatingActionButton imgAddNewNote;
     private RecyclerView recyclerView;
     RecViewAdapter adapter;
 
@@ -46,6 +50,18 @@ public class AllNotesActivity extends AppCompatActivity {
             Intent intent = new Intent(this, EditNoteActivity.class);
             intent.putExtra(KEY_NOTE_OBJECT, new Note().toSerialized());
             startActivity(intent);
+        });
+
+        recyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if(scrollY-oldScrollY >0){
+                    imgAddNewNote.hide();
+                }
+                else{
+                    imgAddNewNote.show();
+                }
+            }
         });
     }
 }
