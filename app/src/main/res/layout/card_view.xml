@@ -23,14 +23,16 @@
             android:text="Note Title"
             android:id="@+id/txtIdNoteTitle"
             android:textStyle="bold"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:lines="2"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:text="Note content"
             android:id="@+id/txtIdNoteText"
-            android:layout_below="@+id/txtIdNoteTitle"/>
+            android:layout_below="@+id/txtIdNoteTitle"
+            android:lines="7"/>
 
         <ImageView
             android:layout_width="wrap_content"
