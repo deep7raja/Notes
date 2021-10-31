@@ -4,8 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -26,6 +31,15 @@ public class EditNoteActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btnIdNoteEditSave);
         btnDiscard = findViewById(R.id.btnIdNoteEditDiscard);
         setInitialText();
+        editTextContent.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    saveNote();
+                }
+                return false;
+            }
+        });
         btnSave.setOnClickListener(v -> saveNote());
         btnDiscard.setOnClickListener(v -> gotoAllNotes());
     }
@@ -33,7 +47,10 @@ public class EditNoteActivity extends AppCompatActivity {
     private void saveNote(){
         note.setTitle(editTextTitle.getText().toString());
         note.setContent(editTextContent.getText().toString());
-        Utils.addNote(note);
+        if(!Utils.addNote(note)){
+            Toast.makeText(this, "Error in saving the note please try again", Toast.LENGTH_SHORT).show();
+            return;
+        }
         gotoAllNotes();
     }
 

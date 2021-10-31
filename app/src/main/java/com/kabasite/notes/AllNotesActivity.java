@@ -35,6 +35,7 @@ public class AllNotesActivity extends AppCompatActivity {
             Log.e("myError", "onCreate: empty note passed to setNote in AllNotesActivity");
         }
         adapter.setNotes(note);
+        adapter.setContext(this);
         Log.d("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "onCreate: setNotesCalled from AllNotesActivity");
         recyclerView.setAdapter(adapter);
         LinearLayoutManager linearLayout = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);

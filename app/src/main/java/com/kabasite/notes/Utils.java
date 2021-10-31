@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.sql.Array;
 import java.util.ArrayList;
 
 public class Utils {
@@ -17,6 +18,10 @@ public class Utils {
 
     private Utils(Context context){
         db = context.getSharedPreferences("alternate_db", Context.MODE_PRIVATE);
+        if(!db.getString("KEY_IS_FIRST_RUN", "").equals("1")){
+            db.edit().putString("KEY_IS_FIRST_RUN", "1").commit();
+            setAllNotes(new ArrayList<>());
+        }
     }
 
     public static Utils getInstance(Context context){
@@ -28,15 +33,19 @@ public class Utils {
 
     public static ArrayList<Note> getAllNotes(){
         String tempString = db.getString(KEY_ALL_NOTES_IN_DB, "");
+        if("" == tempString){
+            return new ArrayList<>();
+        }
         if(null != tempString){
+            Log.d("mysuc", "getAllNotes: returnd success");
             return new Gson().fromJson(tempString, new TypeToken<ArrayList<Note>>(){}.getType());
         }
         return null;
     }
 
     public static void setAllNotes(ArrayList<Note> notes){
-
         db.edit().remove(KEY_ALL_NOTES_IN_DB).putString(KEY_ALL_NOTES_IN_DB, new Gson().toJson(notes)).commit();
+        Log.d("mysuc", "setAllNotes: returned successs");
     }
 
     public static boolean addNote(Note note) {
@@ -45,6 +54,25 @@ public class Utils {
             notes.add(0, note);
             setAllNotes(notes);
             return true;
+        }
+        return false;
+    }
+
+    public static boolean deleteNote(Note note){
+        ArrayList<Note> notes = getAllNotes();
+        if(null != notes){
+            for(Note n:notes){
+                if(n.getTitle().equals(note.getTitle()) && n.getContent().equals(note.getContent())){
+                    if(notes.remove(n)){
+                        setAllNotes(notes);
+                        return true;
+                    }
+                    else{
+                        Log.e("myError", "deleteNote: BBBb");
+                    }
+                }
+            }
+            Log.e("myError", "deleteNote: AAAa");
         }
         return false;
     }

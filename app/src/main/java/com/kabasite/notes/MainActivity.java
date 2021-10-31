@@ -27,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<Note> notes = new ArrayList<>();
             notes = new ArrayList<>();
             notes.add(new Note("Hello There", "General Kenobi"));
-            notes.add(new Note("Hello There General kenobi ah general gracious how are you you must be tired af",
-                    "General Kenobi: yeah I am tired AF, how are you doing \n I am doing my part in the comming war by \n comming all over the place"));
+            notes.add(new Note("Hello There General kenobi ah general gracious how are you you must be tired llllll",
+                    "General Kenobi: yeah I am tired ngybg, how are you doing \n I am doing my part in the comming war by \n comming all over the place"));
             Utils.setAllNotes(notes);
         });
         btnDeleteAllNotes.setOnClickListener(v -> {
